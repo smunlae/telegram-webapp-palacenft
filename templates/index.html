@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    window.onload = () => {
+      const initData = Telegram.WebApp.initData;
+      fetch('/fetch_offers', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ x_user_data: initData })
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        const pre = document.createElement("pre");
+        pre.innerText = JSON.stringify(data, null, 2);
+        document.body.appendChild(pre);
+      })
+      .catch(e => {
+        document.body.innerText = "Ошибка: " + e;
+      });
+    };
+  </script>
+</head>
+<body>
+  <h3>Загрузка данных с palacenft.com...</h3>
+</body>
+</html>

@@ -8,17 +8,17 @@
     window.addEventListener("DOMContentLoaded", () => {
       Telegram.WebApp.ready();
 
-      const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+      const initData = Telegram.WebApp.initData;
 
-      // Покажем initDataUnsafe на странице (для отладки)
+      // Покажем initData на экране для отладки
       const debug = document.createElement("pre");
-      debug.innerText = "initDataUnsafe:\n" + JSON.stringify(initDataUnsafe, null, 2);
+      debug.innerText = "initData:\n" + initData;
       document.body.appendChild(debug);
 
       fetch("/fetch_offers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(initDataUnsafe)
+        body: JSON.stringify({ init_data: initData })
       })
       .then(res => res.json())
       .then(data => {

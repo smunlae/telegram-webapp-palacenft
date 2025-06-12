@@ -5,31 +5,31 @@
   <title>PalaceNFT Offers</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener("DOMContentLoaded", () => {
       Telegram.WebApp.ready();
 
-      const initData = Telegram.WebApp.initData;
+      const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
 
-      // Отладка: выводим initData на экран
-      const debug = document.createElement('pre');
-      debug.innerText = 'initData:\n' + initData;
+      // Покажем initDataUnsafe на странице (для отладки)
+      const debug = document.createElement("pre");
+      debug.innerText = "initDataUnsafe:\n" + JSON.stringify(initDataUnsafe, null, 2);
       document.body.appendChild(debug);
 
-      fetch('/fetch_offers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ x_user_data: initData })
+      fetch("/fetch_offers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(initDataUnsafe)
       })
-      .then(resp => resp.json())
+      .then(res => res.json())
       .then(data => {
-        const pre = document.createElement('pre');
+        const pre = document.createElement("pre");
         pre.innerText = JSON.stringify(data, null, 2);
         document.body.appendChild(pre);
       })
-      .catch(e => {
-        const err = document.createElement('pre');
-        err.innerText = 'Ошибка: ' + e;
-        document.body.appendChild(err);
+      .catch(err => {
+        const pre = document.createElement("pre");
+        pre.innerText = "Ошибка: " + err;
+        document.body.appendChild(pre);
       });
     });
   </script>

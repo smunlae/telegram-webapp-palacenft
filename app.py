@@ -13,15 +13,12 @@ def fetch_offers():
     payload = request.get_json()
     init_data = payload.get("init_data", "")
 
-    # Печатаем для отладки
     print("👉 INIT_DATA_RECV:", init_data)
 
     headers = {
         "x-user-data": init_data,
-
-        # Заголовки как в DevTools
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                      "Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                      "(KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0",
         "Referer": "https://palacenft.com/collection/2",
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
@@ -30,12 +27,11 @@ def fetch_offers():
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Site": "same-origin",
 
-        # ⚠️ Обнови значения cookies вручную из DevTools, иначе работать не будет!
+        # ⚠️ ЗАМЕНИ НА АКТУАЛЬНЫЕ КУКИ ИЗ DEVTOOLS
         "Cookie": (
             "_ga=GA1.2.2077254862.1749613609; "
             "_ga_E3QPPBEBTS=GS2.1.1749764039.0.5.5g1st1r74064035j6sj0h0; "
             "cf_clearance=mhserNXU6017CpsM.SwinaN358K1W1woTi9FOS0B1PM-1749608626-1.2.11-"
-            # 👆 это значение будет меняться примерно раз в 24 часа!
         ),
     }
 
@@ -57,3 +53,7 @@ def fetch_offers():
         return {"error": f"HTTP error: {http_err.response.status_code}, {http_err.response.text}"}, 401
     except Exception as e:
         return {"error": str(e)}, 500
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

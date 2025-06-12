@@ -27,6 +27,8 @@ def fetch_offers():
         "hash": qs.get("hash", [""])[0],
     }
 
+    print("INITDATA:", x_user_data)
+
     try:
         resp = requests.get(
             "https://palacenft.com/api/v1/markets/offers",

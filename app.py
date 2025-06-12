@@ -18,10 +18,15 @@ def fetch_offers():
 
     headers = {
         "x-user-data": init_data,
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json",
-        "Referer": "https://palacenft.com/collection/2"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                      "(KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0",
+        "Referer": "https://palacenft.com/collection/2",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "ru,en;q=0.8,en-US;q=0.7",
+        "Cookie": "_ga=GA1.2.2077254862.1749613609; _ga_E3QPPBEBTS=GS2.1.1749764039.0.5.5g1st1r74064035j6sj0h0; cf_clearance=mhserNXU..."
     }
+
 
     try:
         resp = requests.get(

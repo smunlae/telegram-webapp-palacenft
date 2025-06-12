@@ -8,29 +8,35 @@
     window.addEventListener("DOMContentLoaded", () => {
       Telegram.WebApp.ready();
 
-      const initData = Telegram.WebApp.initData;
+      // Получаем оригинальную строку и удаляем query_id
+      let initData = Telegram.WebApp.initData;
+      let filtered = initData
+        .split("&")
+        .filter(p => !p.startsWith("query_id="))
+        .join("&");
 
-      // Покажем initData на экране для отладки
+      // Покажем отладочную инфу
       const debug = document.createElement("pre");
-      debug.innerText = "initData:\n" + initData;
+      debug.innerText = "x-user-data:\n" + filtered;
       document.body.appendChild(debug);
 
+      // Отправим на сервер
       fetch("/fetch_offers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ init_data: initData })
+        body: JSON.stringify({ init_data: filtered })
       })
-      .then(res => res.json())
-      .then(data => {
-        const pre = document.createElement("pre");
-        pre.innerText = JSON.stringify(data, null, 2);
-        document.body.appendChild(pre);
-      })
-      .catch(err => {
-        const pre = document.createElement("pre");
-        pre.innerText = "Ошибка: " + err;
-        document.body.appendChild(pre);
-      });
+        .then(res => res.json())
+        .then(data => {
+          const pre = document.createElement("pre");
+          pre.innerText = JSON.stringify(data, null, 2);
+          document.body.appendChild(pre);
+        })
+        .catch(err => {
+          const errPre = document.createElement("pre");
+          errPre.innerText = "Ошибка: " + err;
+          document.body.appendChild(errPre);
+        });
     });
   </script>
 </head>

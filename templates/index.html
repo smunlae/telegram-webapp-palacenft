@@ -10,6 +10,11 @@
 
       const initData = Telegram.WebApp.initData;
 
+      // Отладка: выводим initData на экран
+      const debug = document.createElement('pre');
+      debug.innerText = 'initData:\n' + initData;
+      document.body.appendChild(debug);
+
       fetch('/fetch_offers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

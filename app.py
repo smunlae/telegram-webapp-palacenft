@@ -13,13 +13,19 @@ def fetch_offers():
     payload = request.get_json()
     x_user_data = payload.get("x_user_data")
 
-    headers = {
-        "x-user-data": x_user_data,
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json",
-        "Referer": "https://palacenft.com/collection/2"
-    }
+# Распарсим initData вручную
+from urllib.parse import parse_qs
 
+qs = parse_qs(x_user_data)
+headers = {
+    "x-user-data": x_user_data,
+    "User-Agent": "Mozilla/5.0",
+    "Accept": "application/json",
+    "Referer": "https://palacenft.com/collection/2",
+    "auth_date": qs.get("auth_date", [""])[0],
+    "signature": qs.get("signature", [""])[0],
+    "hash": qs.get("hash", [""])[0],
+}
     try:
         resp = requests.get(
             "https://palacenft.com/api/v1/markets/offers",

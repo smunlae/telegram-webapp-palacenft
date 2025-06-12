@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 import requests
 import os
 import json
+from urllib.parse import urlencode
 
 app = Flask(__name__)
 
@@ -13,23 +14,24 @@ def index():
 def fetch_offers():
     payload = request.get_json()
 
-    # Извлекаем нужные поля
-    user_data = payload.get("user", {})
-    auth_date = payload.get("auth_date", "")
-    signature = payload.get("signature", "")
-    hash_ = payload.get("hash", "")
-
-    # Преобразуем весь payload в JSON-строку
-    full_user_data = json.dumps(payload)
+    # Преобразуем в initData строку (query string)
+    user_json = json.dumps(payload.get("user", {}), separators=(",", ":"))
+    init_data_query = urlencode({
+        "query_id": payload.get("query_id", ""),
+        "user": user_json,
+        "auth_date": payload.get("auth_date", ""),
+        "hash": payload.get("hash", ""),
+        "signature": payload.get("signature", "")
+    })
 
     headers = {
-        "x-user-data": full_user_data,
+        "x-user-data": init_data_query,
         "User-Agent": "Mozilla/5.0",
         "Accept": "application/json",
         "Referer": "https://palacenft.com/collection/2",
-        "auth_date": str(auth_date),
-        "signature": signature,
-        "hash": hash_
+        "auth_date": payload.get("auth_date", ""),
+        "signature": payload.get("signature", ""),
+        "hash": payload.get("hash", "")
     }
 
     try:

@@ -13,6 +13,9 @@ def fetch_offers():
     payload = request.get_json()
     init_data = payload.get("init_data", "")
 
+    # Выводим для отладки
+    print("👉 INIT_DATA_RECV:", init_data)
+
     headers = {
         "x-user-data": init_data,
         "User-Agent": "Mozilla/5.0",
@@ -34,7 +37,7 @@ def fetch_offers():
         resp.raise_for_status()
         return resp.json()
     except Exception as e:
-        return {"error": str(e)}, 401
+        return {"error": str(e)}, 400
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 import requests
 import os
-from urllib.parse import parse_qs  # <-- переносим сюда
+import json
 
 app = Flask(__name__)
 
@@ -12,22 +12,25 @@ def index():
 @app.route("/fetch_offers", methods=["POST"])
 def fetch_offers():
     payload = request.get_json()
-    x_user_data = payload.get("x_user_data")
 
-    # Распарсим initData вручную
-    qs = parse_qs(x_user_data)
+    # Извлекаем нужные поля
+    user_data = payload.get("user", {})
+    auth_date = payload.get("auth_date", "")
+    signature = payload.get("signature", "")
+    hash_ = payload.get("hash", "")
+
+    # Преобразуем весь payload в JSON-строку
+    full_user_data = json.dumps(payload)
 
     headers = {
-        "x-user-data": x_user_data,
+        "x-user-data": full_user_data,
         "User-Agent": "Mozilla/5.0",
         "Accept": "application/json",
         "Referer": "https://palacenft.com/collection/2",
-        "auth_date": qs.get("auth_date", [""])[0],
-        "signature": qs.get("signature", [""])[0],
-        "hash": qs.get("hash", [""])[0],
+        "auth_date": str(auth_date),
+        "signature": signature,
+        "hash": hash_
     }
-
-    print("INITDATA:", x_user_data)
 
     try:
         resp = requests.get(

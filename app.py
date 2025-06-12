@@ -1,8 +1,6 @@
 from flask import Flask, request, render_template
 import requests
 import os
-import json
-from urllib.parse import urlencode
 
 app = Flask(__name__)
 
@@ -13,25 +11,13 @@ def index():
 @app.route("/fetch_offers", methods=["POST"])
 def fetch_offers():
     payload = request.get_json()
-
-    # Преобразуем в initData строку (query string)
-    user_json = json.dumps(payload.get("user", {}), separators=(",", ":"))
-    init_data_query = urlencode({
-        "query_id": payload.get("query_id", ""),
-        "user": user_json,
-        "auth_date": payload.get("auth_date", ""),
-        "hash": payload.get("hash", ""),
-        "signature": payload.get("signature", "")
-    })
+    init_data = payload.get("init_data", "")
 
     headers = {
-        "x-user-data": init_data_query,
+        "x-user-data": init_data,
         "User-Agent": "Mozilla/5.0",
         "Accept": "application/json",
-        "Referer": "https://palacenft.com/collection/2",
-        "auth_date": payload.get("auth_date", ""),
-        "signature": payload.get("signature", ""),
-        "hash": payload.get("hash", "")
+        "Referer": "https://palacenft.com/collection/2"
     }
 
     try:
@@ -48,7 +34,7 @@ def fetch_offers():
         resp.raise_for_status()
         return resp.json()
     except Exception as e:
-        return {"error": str(e)}, 400
+        return {"error": str(e)}, 401
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
